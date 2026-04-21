@@ -1,0 +1,25 @@
+import { Auth } from "jcc-express-mvc";
+import { httpContext } from "jcc-express-mvc";
+import { Inject, Method } from "jcc-express-mvc/Core/Dependency";
+import { AuthRequest } from "@/Request/AuthRequest";
+
+@Inject()
+export class AuthController {
+  //
+
+  //
+
+  @Method()
+  async register({ req, res, next } = httpContext, authRequest: AuthRequest) {
+    const save = await authRequest.save();
+    return save
+      ? Auth.attempt(next)
+      : res.json({ message: "Invalid credentials" });
+  }
+
+  //
+
+  async login({ next } = httpContext) {
+    return Auth.attempt(next);
+  }
+}
